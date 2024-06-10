@@ -7,7 +7,10 @@ import ru.yandex.practicum.filmorate.controller.FilmController;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FilmModelTest {
@@ -46,7 +49,21 @@ public class FilmModelTest {
 
     //POST tests
     @Test
-    public void createProperlyDefinedFilmTest() {}
+    public void createProperlyDefinedFilmTest() {
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("FilmDescription");
+        film.setDuration(Duration.ofMinutes(120));
+        film.setReleaseDate(LocalDate.of(1999, Month.MARCH, 22));
+
+
+        assertDoesNotThrow(() -> controller.create(film), "Validation error occurred");
+        List<Film> films = new ArrayList<>(controller.getFilms());
+        assertNotNull(films, "Collection is null");
+        assertEquals(1, films.size(), "Collection size is not 1");
+        assertEquals(1, films.getFirst().getId(), "Added film id is not 1");
+    }
+
     @Test
     public void createNullFilmTest() {}
     @Test

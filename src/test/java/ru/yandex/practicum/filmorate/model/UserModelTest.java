@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 import java.time.LocalDate;
@@ -162,8 +163,33 @@ public class UserModelTest {
     }
 
     @Test
-    public void updateNullUserTest() {}
+    public void updateNullUserTest() {
+        User user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin("login");
+        user.setName("username");
+        user.setBirthday(LocalDate.of(1999, Month.MAY, 18));
+        controller.create(user);
+
+        assertThrows(ValidationException.class, () -> controller.update(null), "Exception is not thrown");
+    }
 
     @Test
-    public void updateUserWithNonExistingIdTest() {}
+    public void updateUserWithNonExistingIdTest() {
+        User user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin("login");
+        user.setName("username");
+        user.setBirthday(LocalDate.of(1999, Month.MAY, 18));
+        controller.create(user);
+
+        User updatedUser = new User();
+        updatedUser.setId(15);
+        updatedUser.setEmail("Email@user.ru");
+        updatedUser.setLogin("NewLogin");
+        updatedUser.setName("UpdatedUsername");
+        updatedUser.setBirthday(LocalDate.of(1999, Month.MARCH, 22));
+        assertThrows(NotFoundException.class,() -> controller.update(updatedUser),
+                 "Updated user with non-existing id");
+    }
 }

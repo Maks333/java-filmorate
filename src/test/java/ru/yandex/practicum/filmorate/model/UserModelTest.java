@@ -4,9 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +48,20 @@ public class UserModelTest {
 
     //POST tests
     @Test
-    public void createProperlyDefinedUserTest() {}
+    public void createProperlyDefinedUserTest() {
+        User user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin("login");
+        user.setName("username");
+        user.setBirthday(LocalDate.of(1999, Month.MAY, 18));
+
+
+        assertDoesNotThrow(() -> controller.create(user), "Validation error occurred");
+        List<User> users = new ArrayList<>(controller.getUsers());
+        assertNotNull(users, "Collection is null");
+        assertEquals(1, users.size(), "Collection size is not 1");
+        assertEquals(1, users.getFirst().getId(), "Added user id is not 1");
+    }
 
     @Test
     public void createNullUserTest() {}

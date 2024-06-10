@@ -16,6 +16,8 @@ import java.util.Map;
 @RequestMapping("/films")
 @Slf4j
 public class FilmController {
+    static final LocalDate LOWER_BOUND_RELEASE_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
+    static final int MAX_DESCRIPTION_LENGTH = 200;
     Map<Integer, Film> films = new HashMap<>();
 
     @GetMapping
@@ -72,7 +74,6 @@ public class FilmController {
         log.trace("Start description validation");
         log.debug("Description is {}", film.getDescription());
         log.debug("Description length is {}", (film.getDescription() == null ? 0 : film.getDescription().length()));
-        int MAX_DESCRIPTION_LENGTH = 200;
         if (film.getDescription() == null || film.getDescription().length() > MAX_DESCRIPTION_LENGTH) {
             log.error("Film description length is exceed 200 symbols or is empty");
             throw new ValidationException("Film description length exceeds 200 symbols or is empty. Description length: " +
@@ -81,7 +82,6 @@ public class FilmController {
 
         log.trace("Start release date validation");
         log.debug("Release Date is {}", film.getReleaseDate());
-        LocalDate LOWER_BOUND_RELEASE_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
         if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(LOWER_BOUND_RELEASE_DATE)) {
             log.error("Film release date is earlier than 28 december 1895 or null");
             throw new ValidationException("Film release is earlier than 28 december 1895 or is null. Yours is " +

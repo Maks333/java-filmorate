@@ -85,7 +85,20 @@ public class UserModelTest {
     }
 
     @Test
-    public void createUserWithInvalidLoginTest() {}
+    public void createUserWithInvalidLoginTest() {
+        User user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin(null);
+        assertThrows(ValidationException.class, () -> controller.create(user), "Exception is not thrown");
+
+        user.setLogin("      ");
+        assertThrows(ValidationException.class, () -> controller.create(user), "Exception is not thrown");
+
+        user.setLogin("user   name");
+        assertThrows(ValidationException.class, () -> controller.create(user), "Exception is not thrown");
+
+        assertEquals(0, controller.getUsers().size(), "Collection has elements");
+    }
 
     @Test
     public void createUserWithEmptyNameTest() {}

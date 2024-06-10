@@ -22,10 +22,8 @@ public class FilmController {
     public Film create(@RequestBody Film film) {
         validate(film);
         film.setId(getNextId());
-
-        //add film to films
-        //return film
-        return new Film();
+        films.put(film.getId(), film);
+        return film;
     }
 
     @PutMapping

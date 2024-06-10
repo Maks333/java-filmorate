@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -29,8 +30,13 @@ public class UserController {
 
     @PutMapping
     public User update(@RequestBody User user) {
+        validate(user);
         //cannot update user with non-existing id
-        return null;
+        if (!users.containsKey(user.getId())) {
+            throw new NotFoundException("User with " + user.getId() + " is not found");
+        }
+        users.put(user.getId(), user);
+        return user;
     }
 
     private void validate(User user) {

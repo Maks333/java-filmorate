@@ -150,8 +150,19 @@ public class FilmModelTest {
         assertEquals(1, films.size(), "Collection size is not 1");
         assertTrue(films.contains(updatedFilm), "Collection does not contain updated film");
     }
+
     @Test
-    public void updateNullFilmTest() {}
+    public void updateNullFilmTest() {
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("FilmDescription");
+        film.setDuration(Duration.ofMinutes(120));
+        film.setReleaseDate(LocalDate.of(1999, Month.MARCH, 22));
+        controller.create(film);
+
+        assertThrows(ValidationException.class, () -> controller.update(null), "Exception is not thrown");
+    }
+
     @Test
     public void updateFilmWithNonExistingIdTest() {}
 

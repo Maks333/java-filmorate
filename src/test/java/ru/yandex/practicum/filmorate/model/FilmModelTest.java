@@ -130,7 +130,26 @@ public class FilmModelTest {
 
     //PUT tests
     @Test
-    public void updateProperlyDefinedFilmTest() {}
+    public void updateProperlyDefinedFilmTest() {
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("FilmDescription");
+        film.setDuration(Duration.ofMinutes(120));
+        film.setReleaseDate(LocalDate.of(1999, Month.MARCH, 22));
+        controller.create(film);
+
+        Film updatedFilm = new Film();
+        updatedFilm.setId(1);
+        updatedFilm.setName("Name");
+        updatedFilm.setDescription("Desc");
+        updatedFilm.setDuration(Duration.ofMinutes(60));
+        updatedFilm.setReleaseDate(LocalDate.of(1999, Month.MARCH, 17));
+        assertDoesNotThrow(() -> controller.update(updatedFilm), "Invalid film");
+
+        List<Film> films = new ArrayList<>(controller.getFilms());
+        assertEquals(1, films.size(), "Collection size is not 1");
+        assertTrue(films.contains(updatedFilm), "Collection does not contain updated film");
+    }
     @Test
     public void updateNullFilmTest() {}
     @Test

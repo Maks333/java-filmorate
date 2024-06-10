@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -65,9 +66,22 @@ public class FilmModelTest {
     }
 
     @Test
-    public void createNullFilmTest() {}
+    public void createNullFilmTest() {
+        assertThrows(ValidationException.class, () -> controller.create(null), "Exception is not thrown");
+    }
+
     @Test
-    public void createFilmWithInvalidNameTest() {}
+    public void createFilmWithInvalidNameTest() {
+        Film film = new Film();
+        film.setName(null);
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        film.setName("     ");
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        assertEquals(0, controller.getFilms().size(), "Collection has elements");
+    }
+
     @Test
     public void createFilmWithInvalidDescriptionTest() {}
     @Test

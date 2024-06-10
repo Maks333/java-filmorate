@@ -69,7 +69,7 @@ public class FilmController {
 
         log.trace("Start description validation");
         log.debug("Description is {}", film.getDescription());
-        log.debug("Description length is {}", film.getDescription().length());
+        log.debug("Description length is {}", (film.getDescription() == null ? 0 : film.getDescription().length()));
         int MAX_DESCRIPTION_LENGTH = 200;
         if (film.getDescription() == null || film.getDescription().length() > MAX_DESCRIPTION_LENGTH) {
             log.error("Film description length is exceed 200 symbols or null");

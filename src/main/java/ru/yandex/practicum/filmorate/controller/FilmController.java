@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -28,7 +29,12 @@ public class FilmController {
 
     @PutMapping
     public Film update(@RequestBody Film film) {
-        return new Film();
+        validate(film);
+        if (!films.containsKey(film.getId())) {
+            throw new NotFoundException("Film with id " + film.getId() + " is not found");
+        }
+        films.put(film.getId(), film);
+        return film;
     }
 
     private void validate(Film film) {

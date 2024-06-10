@@ -124,7 +124,19 @@ public class UserModelTest {
     }
 
     @Test
-    public void createUserWithInvalidBirthDayTest() {}
+    public void createUserWithInvalidBirthDayTest() {
+        User user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin("login");
+        user.setName("username");
+        user.setBirthday(null);
+        assertThrows(ValidationException.class, () -> controller.create(user), "Exception is not thrown");
+
+        user.setBirthday(LocalDate.now().plusDays(1));
+        assertThrows(ValidationException.class, () -> controller.create(user), "Exception is not thrown");
+
+        assertEquals(0, controller.getUsers().size(), "Collection has elements");
+    }
 
     //PUT tests
     @Test

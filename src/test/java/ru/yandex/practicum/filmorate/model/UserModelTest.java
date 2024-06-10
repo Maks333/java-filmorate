@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -64,7 +65,9 @@ public class UserModelTest {
     }
 
     @Test
-    public void createNullUserTest() {}
+    public void createNullUserTest() {
+        assertThrows(ValidationException.class, () -> controller.create(null), "Exception is not thrown");
+    }
 
     @Test
     public void createUserWithInvalidEmailTest() {}

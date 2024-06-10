@@ -189,7 +189,7 @@ public class UserModelTest {
         updatedUser.setLogin("NewLogin");
         updatedUser.setName("UpdatedUsername");
         updatedUser.setBirthday(LocalDate.of(1999, Month.MARCH, 22));
-        assertThrows(NotFoundException.class,() -> controller.update(updatedUser),
-                 "Updated user with non-existing id");
+        assertThrows(NotFoundException.class, () -> controller.update(updatedUser),
+                "Updated user with non-existing id");
     }
 }

@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
 import java.time.Duration;
@@ -164,6 +165,21 @@ public class FilmModelTest {
     }
 
     @Test
-    public void updateFilmWithNonExistingIdTest() {}
+    public void updateFilmWithNonExistingIdTest() {
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("FilmDescription");
+        film.setDuration(Duration.ofMinutes(120));
+        film.setReleaseDate(LocalDate.of(1999, Month.MARCH, 22));
+        controller.create(film);
+
+        Film updatedFilm = new Film();
+        updatedFilm.setId(15);
+        updatedFilm.setName("Name");
+        updatedFilm.setDescription("Desc");
+        updatedFilm.setDuration(Duration.ofMinutes(60));
+        updatedFilm.setReleaseDate(LocalDate.of(1999, Month.MARCH, 17));
+        assertThrows(NotFoundException.class, () -> controller.update(updatedFilm), "Exception is not thrown");
+    }
 
 }

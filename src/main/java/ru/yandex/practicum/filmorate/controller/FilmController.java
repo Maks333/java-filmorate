@@ -22,7 +22,7 @@ public class FilmController {
     public Collection<Film> getFilms() {
         log.trace("Enter GET /films endpoint");
         log.debug("Film list : {}", films);
-        log.info("Return all films");
+        log.info("Return collection of {} films", films.size());
         return films.values();
     }
 
@@ -31,29 +31,31 @@ public class FilmController {
         log.trace("Enter POST /films endpoint");
         log.trace("Start film validation for POST /films endpoint");
         validate(film);
+
         film.setId(getNextId());
         log.debug("Film {} is assigned {} id", film.getName(), film.getId());
         films.put(film.getId(), film);
-        log.info("Film {} with {} id added into collection", film.getName(), film.getId());
+
+        log.info("Film: {} with id: {} is added into collection", film.getName(), film.getId());
         return film;
     }
 
     @PutMapping
     public Film update(@RequestBody Film film) {
         log.trace("Enter PUT /films endpoint");
+        log.trace("Start film validation for PUT /films endpoint");
         validate(film);
         log.debug("Film id is {}", film.getId());
         if (!films.containsKey(film.getId())) {
             log.error("Film {} with {} id is not found", film.getName(), film.getId());
             throw new NotFoundException("Film with id " + film.getId() + " is not found");
         }
-        log.info("Film with {} id is updated", film.getId());
+        log.info("Film with id: {} is updated", film.getId());
         films.put(film.getId(), film);
         return film;
     }
 
     private void validate(Film film) {
-        log.trace("Start film validation for PUT /films endpoint");
         log.trace("Start reference validation");
         if (film == null) {
             log.error("Film object reference to null");
@@ -63,8 +65,8 @@ public class FilmController {
         log.trace("Start name validation");
         log.debug("Name is {}", film.getName());
         if (film.getName() == null || film.getName().isBlank()) {
-            log.error("Name is empty or null");
-            throw new ValidationException("Name cannot be empty");
+            log.error("Name is empty");
+            throw new ValidationException("Name is empty");
         }
 
         log.trace("Start description validation");
@@ -72,8 +74,8 @@ public class FilmController {
         log.debug("Description length is {}", (film.getDescription() == null ? 0 : film.getDescription().length()));
         int MAX_DESCRIPTION_LENGTH = 200;
         if (film.getDescription() == null || film.getDescription().length() > MAX_DESCRIPTION_LENGTH) {
-            log.error("Film description length is exceed 200 symbols or null");
-            throw new ValidationException("Film description length cannot exceed 200 symbols. Description length: " +
+            log.error("Film description length is exceed 200 symbols or is empty");
+            throw new ValidationException("Film description length exceeds 200 symbols or is empty. Description length: " +
                     (film.getDescription() == null ? 0 : film.getDescription().length()));
         }
 
@@ -82,15 +84,15 @@ public class FilmController {
         LocalDate LOWER_BOUND_RELEASE_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
         if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(LOWER_BOUND_RELEASE_DATE)) {
             log.error("Film release date is earlier than 28 december 1895 or null");
-            throw new ValidationException("Film release date cannot be earlier than 28 december 1895. Yours is " +
+            throw new ValidationException("Film release is earlier than 28 december 1895 or is null. Yours is " +
                     film.getReleaseDate());
         }
 
         log.trace("Start duration validation");
         log.debug("Duration is {}", film.getDuration());
         if (film.getDuration() == null || film.getDuration().isNegative() || film.getDuration().isZero()) {
-            log.error("Duration is not positive number or null");
-            throw new ValidationException("Duration must be a positive number");
+            log.error("Duration is not a positive number or null");
+            throw new ValidationException("Duration is not a positive number or null");
         }
     }
 

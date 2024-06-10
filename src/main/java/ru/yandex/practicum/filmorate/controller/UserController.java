@@ -35,7 +35,7 @@ public class UserController {
         log.debug("User: {} is assigned {} id", user.getName(), user.getId());
         users.put(user.getId(), user);
 
-        log.info("User: {} with id: {} added into collection", user.getName(), user.getId());
+        log.info("User: {} with id: {} is added into collection", user.getName(), user.getId());
         return user;
     }
 
@@ -51,7 +51,7 @@ public class UserController {
             throw new NotFoundException("User with " + user.getId() + " is not found");
         }
         users.put(user.getId(), user);
-        log.info("User: {} with id: {} is updated", user.getName(), user.getId());
+        log.info("User with id: {} is updated", user.getId());
         return user;
     }
 

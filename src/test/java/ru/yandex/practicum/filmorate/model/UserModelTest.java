@@ -140,7 +140,26 @@ public class UserModelTest {
 
     //PUT tests
     @Test
-    public void updateProperlyDefinedUserTest() {}
+    public void updateProperlyDefinedUserTest() {
+        User user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin("login");
+        user.setName("username");
+        user.setBirthday(LocalDate.of(1999, Month.MAY, 18));
+        controller.create(user);
+
+        User updatedUser = new User();
+        updatedUser.setId(1);
+        updatedUser.setEmail("Email@user.ru");
+        updatedUser.setLogin("NewLogin");
+        updatedUser.setName("UpdatedUsername");
+        updatedUser.setBirthday(LocalDate.of(1999, Month.MARCH, 22));
+        assertDoesNotThrow(() -> controller.update(updatedUser), "Invalid user");
+
+        List<User> users = new ArrayList<>(controller.getUsers());
+        assertEquals(1, users.size(), "Collection size is not 1");
+        assertTrue(users.contains(updatedUser), "Collection does not contain updated user");
+    }
 
     @Test
     public void updateNullUserTest() {}

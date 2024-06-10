@@ -14,7 +14,7 @@ public class UserController {
 
     @GetMapping
     public Collection<User> getUsers() {
-        return null;
+        return users.values();
     }
 
     @PostMapping

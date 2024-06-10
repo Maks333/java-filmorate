@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -101,7 +100,28 @@ public class UserModelTest {
     }
 
     @Test
-    public void createUserWithEmptyNameTest() {}
+    public void createUserWithEmptyNameTest() {
+        User user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin("login");
+        user.setName(null);
+        user.setBirthday(LocalDate.of(1999, Month.MAY, 18));
+        User createdUser = controller.create(user);
+
+        assertEquals("login", createdUser.getName(), "Username is not equal to login");
+        assertEquals(1, createdUser.getId(), "User id is not 1");
+        assertEquals(1, controller.getUsers().size(), "Collection size is not 1");
+
+        user = new User();
+        user.setEmail("email@email.ru");
+        user.setLogin("login12");
+        user.setName("            ");
+        user.setBirthday(LocalDate.of(1999, Month.MAY, 18));
+        createdUser = controller.create(user);
+        assertEquals("login12", createdUser.getName(), "Username is not equal to login12");
+        assertEquals(2, createdUser.getId(), "User id is not 2");
+        assertEquals(2, controller.getUsers().size(), "Collection size is not 2");
+    }
 
     @Test
     public void createUserWithInvalidBirthDayTest() {}

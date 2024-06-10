@@ -21,9 +21,7 @@ public class FilmController {
     @PostMapping
     public Film create(@RequestBody Film film) {
         validate(film);
-
-        //create getNextId function
-            //give film new id
+        film.setId(getNextId());
 
         //add film to films
         //return film
@@ -55,5 +53,14 @@ public class FilmController {
         if (film.getDuration().isNegative() || film.getDuration().isZero()) {
             throw new ValidationException("Duration must be a positive number");
         }
+    }
+
+    private int getNextId() {
+        int currentMax = films.keySet()
+                .stream()
+                .mapToInt(id -> id)
+                .max()
+                .orElse(0);
+        return ++currentMax;
     }
 }

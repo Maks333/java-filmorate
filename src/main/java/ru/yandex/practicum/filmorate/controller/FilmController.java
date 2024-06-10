@@ -7,7 +7,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/films")
@@ -43,18 +45,18 @@ public class FilmController {
         if (film.getName() == null || film.getName().isBlank()) throw new ValidationException("Name cannot be empty");
 
         int MAX_DESCRIPTION_LENGTH = 200;
-        if (film.getDescription().length() > MAX_DESCRIPTION_LENGTH) {
+        if (film.getDescription() == null || film.getDescription().length() > MAX_DESCRIPTION_LENGTH) {
             throw new ValidationException("Film description length cannot exceed 200 symbols. Description length: " +
-                    film.getDescription().length());
+                    (film.getDescription() == null ? 0 : film.getDescription().length()));
         }
 
         LocalDate LOWER_BOUND_RELEASE_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
-        if (film.getReleaseDate().isBefore(LOWER_BOUND_RELEASE_DATE)) {
+        if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(LOWER_BOUND_RELEASE_DATE)) {
             throw new ValidationException("Film release date cannot be earlier than 28 december 1895. Yours is " +
                     film.getReleaseDate());
         }
 
-        if (film.getDuration().isNegative() || film.getDuration().isZero()) {
+        if (film.getDuration() == null || film.getDuration().isNegative() || film.getDuration().isZero()) {
             throw new ValidationException("Duration must be a positive number");
         }
     }

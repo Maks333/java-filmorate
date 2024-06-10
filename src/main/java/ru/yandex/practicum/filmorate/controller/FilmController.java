@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -34,7 +36,7 @@ public class FilmController {
         film.setId(getNextId());
         log.debug("Film {} is assigned {} id", film.getName(), film.getId());
         films.put(film.getId(), film);
-        log.info("Film: {} added into collection", film.getName());
+        log.info("Film {} with {} id added into collection", film.getName(), film.getId());
         return film;
     }
 

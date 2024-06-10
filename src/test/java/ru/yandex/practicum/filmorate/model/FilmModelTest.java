@@ -95,8 +95,21 @@ public class FilmModelTest {
         assertEquals(0, controller.getFilms().size(), "Collection has elements");
 
     }
+
     @Test
-    public void createFilmWithInvalidReleaseDateTest() {}
+    public void createFilmWithInvalidReleaseDateTest() {
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("FilmDescription");
+        film.setReleaseDate(null);
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        film.setReleaseDate(LocalDate.of(1895, Month.DECEMBER, 27));
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        assertEquals(0, controller.getFilms().size(), "Collection has elements");
+    }
+
     @Test
     public void createFilmWithInvalidDurationTest() {}
 

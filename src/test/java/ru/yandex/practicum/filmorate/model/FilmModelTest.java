@@ -83,7 +83,18 @@ public class FilmModelTest {
     }
 
     @Test
-    public void createFilmWithInvalidDescriptionTest() {}
+    public void createFilmWithInvalidDescriptionTest() {
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription(null);
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        film.setDescription("A".repeat(201));
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        assertEquals(0, controller.getFilms().size(), "Collection has elements");
+
+    }
     @Test
     public void createFilmWithInvalidReleaseDateTest() {}
     @Test

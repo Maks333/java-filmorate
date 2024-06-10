@@ -111,7 +111,22 @@ public class FilmModelTest {
     }
 
     @Test
-    public void createFilmWithInvalidDurationTest() {}
+    public void createFilmWithInvalidDurationTest() {
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("FilmDescription");
+        film.setReleaseDate(LocalDate.of(1999, Month.MARCH, 22));
+        film.setDuration(null);
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        film.setDuration(Duration.ofMinutes(0));
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        film.setDuration(Duration.ofMinutes(-1));
+        assertThrows(ValidationException.class, () -> controller.create(film), "Exception is not thrown");
+
+        assertEquals(0, controller.getFilms().size(), "Collection has elements");
+    }
 
     //PUT tests
     @Test

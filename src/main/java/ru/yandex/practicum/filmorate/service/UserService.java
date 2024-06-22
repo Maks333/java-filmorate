@@ -17,7 +17,10 @@ public class UserService {
     }
 
     public List<User> getFriends(long id) {
-        return null;
+        return storage.getUserById(id).getFriends()
+                .stream()
+                .map(userID -> storage.getUsers().get(userID.intValue()))
+                .toList();
     }
 
     public void deleteFriend(long id, long friendId) {

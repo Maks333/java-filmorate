@@ -15,5 +15,5 @@ public class User {
     private String name;
     @JsonAdapter(LocalDateAdapter.class)
     private LocalDate birthday;
-    private Set<User> friends;
+    private Set<Long> friends;
 }

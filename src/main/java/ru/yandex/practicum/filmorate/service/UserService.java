@@ -18,14 +18,14 @@ public class UserService {
 
         return user.getFriends().stream()
                 .filter(userId -> otherUser.getFriends().contains(userId))
-                .map(userID -> storage.getUsers().get(userID.intValue()))
+                .map(storage::getUserById)
                 .toList();
     }
 
     public List<User> getFriends(long id) {
         return storage.getUserById(id).getFriends()
                 .stream()
-                .map(userID -> storage.getUsers().get(userID.intValue()))
+                .map(storage::getUserById)
                 .toList();
     }
 

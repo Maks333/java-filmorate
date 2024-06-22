@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -40,12 +41,23 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User update(User user) {
-        return null;
+        log.trace("Enter PUT /users endpoint");
+        log.trace("Start user validation for PUT /users endpoint");
+        validate(user);
+
+        log.debug("User id is {}", user.getId());
+        if (!users.containsKey(user.getId())) {
+            log.error("User {} with {} id is not found", user.getName(), user.getId());
+            throw new NotFoundException("User with " + user.getId() + " is not found");
+        }
+        users.put(user.getId(), user);
+        log.info("User with id: {} is updated", user.getId());
+        return user;
     }
 
     @Override
     public void deleteById(int id) {
-
+        //TODO implement
     }
 
     private void validate(User user) {

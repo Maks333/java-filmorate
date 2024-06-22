@@ -7,10 +7,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -32,6 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
         validate(user);
 
         user.setId(getNextId());
+        user.setFriends(new HashSet<>());
         log.debug("User: {} is assigned {} id", user.getName(), user.getId());
         users.put(user.getId(), user);
 

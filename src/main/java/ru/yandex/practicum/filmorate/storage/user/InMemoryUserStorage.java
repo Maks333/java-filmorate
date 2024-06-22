@@ -96,6 +96,15 @@ public class InMemoryUserStorage implements UserStorage {
         }
     }
 
+    @Override
+    public User getUserById(long id) {
+        return users.values()
+                .stream()
+                .filter(user -> user.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("User with id: " + id + " is not found"));
+    }
+
     private long getNextId() {
         long currentMax = users.keySet()
                 .stream()

@@ -29,7 +29,7 @@ public class UserService {
     }
 
     public User getUser(long id) {
-        return null;
+        return storage.getUserById(id);
     }
 
     public List<User> getUsers() {

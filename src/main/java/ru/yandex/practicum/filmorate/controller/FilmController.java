@@ -1,31 +1,32 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/films")
+@RequiredArgsConstructor
 @Slf4j
 public class FilmController {
     static final LocalDate LOWER_BOUND_RELEASE_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
     static final int MAX_DESCRIPTION_LENGTH = 200;
+    private final FilmStorage storage;
     Map<Integer, Film> films = new HashMap<>();
 
     @GetMapping
-    public Collection<Film> getFilms() {
-        log.trace("Enter GET /films endpoint");
-        log.debug("Film list : {}", films);
-        log.info("Return collection of {} films", films.size());
-        return films.values();
+    public List<Film> getFilms() {
+        return storage.getFilms();
     }
 
     @PostMapping

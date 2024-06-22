@@ -20,8 +20,10 @@ public class UserService {
         return null;
     }
 
-    public void deleteFried(long id, long friendId) {
-
+    public void deleteFriend(long id, long friendId) {
+        User user = storage.getUserById(id);
+        User friend = storage.getUserById(friendId);
+        user.getFriends().remove(friend.getId());
     }
 
     public void addFriend(long id, long friendId) {

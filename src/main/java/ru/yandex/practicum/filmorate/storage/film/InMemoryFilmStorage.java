@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private static final LocalDate LOWER_BOUND_RELEASE_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
     private static final int MAX_DESCRIPTION_LENGTH = 200;
@@ -43,12 +44,22 @@ public class InMemoryFilmStorage implements FilmStorage{
 
     @Override
     public Film update(Film film) {
-        return null;
+        log.trace("Enter PUT /films endpoint");
+        log.trace("Start film validation for PUT /films endpoint");
+        validate(film);
+        log.debug("Film id is {}", film.getId());
+        if (!films.containsKey(film.getId())) {
+            log.error("Film {} with {} id is not found", film.getName(), film.getId());
+            throw new NotFoundException("Film with id " + film.getId() + " is not found");
+        }
+        log.info("Film with id: {} is updated", film.getId());
+        films.put(film.getId(), film);
+        return film;
     }
 
     @Override
     public void deleteById(int id) {
-
+        //Not Implemented
     }
 
     private void validate(Film film) {

@@ -1,28 +1,28 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-@Slf4j
+@RequiredArgsConstructor
 public class UserController {
-    Map<Integer, User> users = new HashMap<>();
+    private final UserStorage storage;
 
     @GetMapping
-    public Collection<User> getUsers() {
-        log.trace("Enter GET /users endpoint");
-        log.debug("User list: {}", users);
-        log.info("Return collection of {} users", users.size());
-        return users.values();
+    public List<User> getUsers() {
+        return storage.getUsers();
     }
 
     @PostMapping

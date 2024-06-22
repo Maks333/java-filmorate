@@ -7,9 +7,9 @@ import java.util.List;
 public interface UserStorage {
     List<User> getUsers();
 
-    User create(User film);
+    User create(User user);
 
-    User update(User film);
+    User update(User user);
 
     void deleteById(int id);
 }

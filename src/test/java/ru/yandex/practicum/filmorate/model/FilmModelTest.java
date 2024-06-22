@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -19,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FilmModelTest {
     private FilmController controller;
 
-
     @BeforeEach
     public void beforeEach() {
-        controller = new FilmController(new InMemoryFilmStorage());
+        controller = new FilmController(new FilmService(new InMemoryFilmStorage(),
+                new UserService(new InMemoryUserStorage())));
     }
 
     //GET tests
@@ -182,5 +185,4 @@ public class FilmModelTest {
         updatedFilm.setReleaseDate(LocalDate.of(1999, Month.MARCH, 17));
         assertThrows(NotFoundException.class, () -> controller.update(updatedFilm), "Exception is not thrown");
     }
-
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    private final Map<Integer, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
 
     @Override
     public List<User> getUsers() {
@@ -56,7 +56,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         //TODO implement
     }
 
@@ -96,10 +96,10 @@ public class InMemoryUserStorage implements UserStorage {
         }
     }
 
-    private int getNextId() {
-        int currentMax = users.keySet()
+    private long getNextId() {
+        long currentMax = users.keySet()
                 .stream()
-                .mapToInt(id -> id)
+                .mapToLong(id -> id)
                 .max()
                 .orElse(0);
         return ++currentMax;

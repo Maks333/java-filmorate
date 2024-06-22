@@ -11,5 +11,5 @@ public interface UserStorage {
 
     User update(User user);
 
-    void deleteById(int id);
+    void deleteById(long id);
 }

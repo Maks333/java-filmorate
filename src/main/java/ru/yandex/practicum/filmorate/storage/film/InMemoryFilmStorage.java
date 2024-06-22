@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private final Map<Integer, Film> films = new HashMap<>();
+    private final Map<Long, Film> films = new HashMap<>();
     private static final LocalDate LOWER_BOUND_RELEASE_DATE = LocalDate.of(1895, Month.DECEMBER, 28);
     private static final int MAX_DESCRIPTION_LENGTH = 200;
 
@@ -58,7 +58,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         //TODO implement
     }
 
@@ -101,10 +101,10 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 
-    private int getNextId() {
-        int currentMax = films.keySet()
+    private long getNextId() {
+        long currentMax = films.keySet()
                 .stream()
-                .mapToInt(id -> id)
+                .mapToLong(id -> id)
                 .max()
                 .orElse(0);
         return ++currentMax;

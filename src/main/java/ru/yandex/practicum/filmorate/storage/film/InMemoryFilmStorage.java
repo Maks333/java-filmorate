@@ -101,6 +101,15 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 
+    @Override
+    public Film getFilmById(long id) {
+        return films.values()
+                .stream()
+                .filter(film -> film.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Film with id: " + id + " is not found"));
+    }
+
     private long getNextId() {
         long currentMax = films.keySet()
                 .stream()

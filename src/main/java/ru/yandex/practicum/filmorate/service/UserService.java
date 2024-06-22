@@ -13,7 +13,13 @@ public class UserService {
     private final UserStorage storage;
 
     public List<User> getCommonFriends(long id, long otherId) {
-        return List.of();
+        User user = storage.getUserById(id);
+        User otherUser = storage.getUserById(otherId);
+
+        return user.getFriends().stream()
+                .filter(userId -> otherUser.getFriends().contains(userId))
+                .map(userID -> storage.getUsers().get(userID.intValue()))
+                .toList();
     }
 
     public List<User> getFriends(long id) {

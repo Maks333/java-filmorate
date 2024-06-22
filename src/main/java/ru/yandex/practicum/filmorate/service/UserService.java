@@ -12,7 +12,6 @@ import java.util.List;
 public class UserService {
     private final UserStorage storage;
 
-
     public List<User> getCommonFriends(long id, long otherId) {
         return List.of();
     }
@@ -31,5 +30,17 @@ public class UserService {
 
     public User getUser(long id) {
         return null;
+    }
+
+    public List<User> getUsers() {
+        return storage.getUsers();
+    }
+
+    public User create(User user) {
+        return storage.create(user);
+    }
+
+    public User update(User user) {
+        return storage.update(user);
     }
 }

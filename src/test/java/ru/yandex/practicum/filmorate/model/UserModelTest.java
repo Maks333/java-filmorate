@@ -22,7 +22,7 @@ public class UserModelTest {
 
     @BeforeEach
     public void beforeEach() {
-        controller = new UserController(new InMemoryUserStorage(), new UserService(new InMemoryUserStorage()));
+        controller = new UserController(new UserService(new InMemoryUserStorage()));
     }
 
     //GET tests

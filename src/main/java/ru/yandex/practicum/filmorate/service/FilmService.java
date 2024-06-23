@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -16,7 +17,15 @@ public class FilmService {
     private final UserStorage userStorage;
 
     public List<Film> getFilmsByLikes(long count) {
-        return null;
+        if (count <= 0) {
+            throw new ValidationException("Parameter count cannot be equal 0 or be negative, yours is = " + count);
+        }
+
+        return filmStorage.getFilms()
+                .stream()
+                .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
+                .limit(count)
+                .toList();
     }
 
     public void unlikeFilm(long id, long userId) {

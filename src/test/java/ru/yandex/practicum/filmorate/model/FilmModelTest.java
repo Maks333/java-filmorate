@@ -25,7 +25,7 @@ public class FilmModelTest {
     @BeforeEach
     public void beforeEach() {
         controller = new FilmController(new FilmService(new InMemoryFilmStorage(),
-                new UserService(new InMemoryUserStorage())));
+                new InMemoryUserStorage()));
     }
 
     //GET tests

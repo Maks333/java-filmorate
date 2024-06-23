@@ -102,7 +102,10 @@ public class InMemoryUserStorage implements UserStorage {
                 .stream()
                 .filter(user -> user.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("User with id: " + id + " is not found"));
+                .orElseThrow(() -> {
+                    log.error("User with id: {} is not found", id);
+                    return new NotFoundException("User with id: " + id + " is not found");
+                });
     }
 
     private long getNextId() {

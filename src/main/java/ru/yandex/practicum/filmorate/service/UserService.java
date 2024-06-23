@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -8,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class UserService {
     private final UserStorage storage;
@@ -34,6 +36,7 @@ public class UserService {
         User friend = storage.getUserById(friendId);
         user.getFriends().remove(friend.getId());
         friend.getFriends().remove(user.getId());
+        log.info("User {} and User {} delete each other from friend list", user.getName(), friend.getName());
     }
 
     public void addFriend(long id, long friendId) {
@@ -41,6 +44,7 @@ public class UserService {
         User friend = storage.getUserById(friendId);
         user.getFriends().add(friend.getId());
         friend.getFriends().add(user.getId());
+        log.info("User {} and User {} add each other into friend list", user.getName(), friend.getName());
     }
 
     public User getUser(long id) {

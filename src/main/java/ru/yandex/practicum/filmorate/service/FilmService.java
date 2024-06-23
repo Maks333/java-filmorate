@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -11,6 +12,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class FilmService {
     private final FilmStorage filmStorage;
@@ -18,6 +20,7 @@ public class FilmService {
 
     public List<Film> getFilmsByLikes(long count) {
         if (count <= 0) {
+            log.error("Parameter count cannot be equal 0 or be negative, yours is {}", count);
             throw new ValidationException("Parameter count cannot be equal 0 or be negative, yours is = " + count);
         }
 
@@ -32,12 +35,14 @@ public class FilmService {
         User user = userStorage.getUserById(userId);
         Film film = filmStorage.getFilmById(id);
         film.getLikes().remove(user.getId());
+        log.info("User {} remove like from {} film", user.getName(), film.getName());
     }
 
     public void likeFilm(long id, long userId) {
         User user = userStorage.getUserById(userId);
         Film film = filmStorage.getFilmById(id);
         film.getLikes().add(user.getId());
+        log.info("User {} add like to {} film", user.getName(), film.getName());
     }
 
     public Film getFilmById(long id) {

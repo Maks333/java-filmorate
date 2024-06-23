@@ -107,7 +107,10 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .stream()
                 .filter(film -> film.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("Film with id: " + id + " is not found"));
+                .orElseThrow(() -> {
+                    log.error("Film with id: {} is not found", id);
+                    return new NotFoundException("Film with id: " + id + " is not found");
+                });
     }
 
     private long getNextId() {

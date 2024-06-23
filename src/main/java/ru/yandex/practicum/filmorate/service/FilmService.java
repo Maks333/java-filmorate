@@ -20,7 +20,9 @@ public class FilmService {
     }
 
     public void unlikeFilm(long id, long userId) {
-
+        User user = userStorage.getUserById(userId);
+        Film film = filmStorage.getFilmById(id);
+        film.getLikes().remove(user.getId());
     }
 
     public void likeFilm(long id, long userId) {

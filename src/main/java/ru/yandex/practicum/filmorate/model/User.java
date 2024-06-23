@@ -5,14 +5,15 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.adapter.LocalDateAdapter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 public class User {
-    private int id;
+    private long id;
     private String email;
     private String login;
     private String name;
     @JsonAdapter(LocalDateAdapter.class)
     private LocalDate birthday;
-
+    private Set<Long> friends;
 }

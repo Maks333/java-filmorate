@@ -98,14 +98,12 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUserById(long id) {
-        return users.values()
-                .stream()
-                .filter(user -> user.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> {
-                    log.error("User with id: {} is not found", id);
-                    return new NotFoundException("User with id: " + id + " is not found");
-                });
+        User user = users.get(id);
+        if (user == null) {
+            log.error("User with id: {} is not found", id);
+            throw new NotFoundException("User with id: " + id + " is not found");
+        }
+        return user;
     }
 
     private long getNextId() {

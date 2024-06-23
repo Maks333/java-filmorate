@@ -103,14 +103,12 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(long id) {
-        return films.values()
-                .stream()
-                .filter(film -> film.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> {
-                    log.error("Film with id: {} is not found", id);
-                    return new NotFoundException("Film with id: " + id + " is not found");
-                });
+        Film film = films.get(id);
+        if (film == null) {
+            log.error("Film with id: {} is not found", id);
+            throw new NotFoundException("Film with id: " + id + " is not found");
+        }
+        return film;
     }
 
     private long getNextId() {

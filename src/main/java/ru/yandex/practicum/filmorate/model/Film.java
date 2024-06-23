@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.adapter.LocalDateAdapter;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 public class Film {
@@ -17,4 +18,5 @@ public class Film {
     private LocalDate releaseDate;
     @JsonAdapter(DurationAdapter.class)
     private Duration duration;
+    private Set<Long> likes;
 }

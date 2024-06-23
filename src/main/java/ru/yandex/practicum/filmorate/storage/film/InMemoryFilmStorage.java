@@ -8,10 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -35,6 +32,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         validate(film);
 
         film.setId(getNextId());
+        film.setLikes(new HashSet<>());
         log.debug("Film {} is assigned {} id", film.getName(), film.getId());
         films.put(film.getId(), film);
 

@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS films (
     description VARCHAR(200) NOT NULL,
     release_date DATE NOT NULL CHECK (release_date >= '1895-12-28'),
     duration BIGINT NOT NULL,
-    rating_id int NOT NULL REFERENCES ratings(id)
+    rating_id int REFERENCES ratings(id)
 );
 
 CREATE TABLE IF NOT EXISTS likes (

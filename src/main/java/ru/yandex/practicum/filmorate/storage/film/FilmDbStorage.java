@@ -1,27 +1,29 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.BaseDbStorage;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository("dbFilmStorage")
-@RequiredArgsConstructor
-public class FilmDbStorage implements FilmStorage {
+public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     private static final String FIND_BY_ID = "SELECT * FROM films WHERE id = ?";
     private static final String FIND_ALL_FILMS = "SELECT * FROM films";
+    private static final String INSERT_QUERY = "INSERT INTO films(name, description, release_date, duration)" +
+            "VALUES(?, ?, ?, ?) returning id";
 
-    private final JdbcTemplate jdbc;
-    private final RowMapper<Film> mapper;
+    public FilmDbStorage(JdbcTemplate jdbc, RowMapper<Film> mapper) {
+        super(jdbc, mapper);
+    }
 
     @Override
     public List<Film> getFilms() {
-        return jdbc.query(FIND_ALL_FILMS, mapper);
+        return findMany(FIND_ALL_FILMS);
     }
 
     @Override
@@ -36,11 +38,12 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(long id) {
-        try {
-            return jdbc.queryForObject(FIND_BY_ID, mapper, id);
-        } catch (EmptyResultDataAccessException ignored) {
-            throw new NotFoundException("Film with id: " + id + " is not found");
-        }
+        Optional<Film> film = findOne(FIND_BY_ID, id);
+       if (film.isPresent()) {
+           return film.get();
+       } else {
+           throw new NotFoundException("Film with id = " + id + " is not found");
+       }
     }
 
     @Override

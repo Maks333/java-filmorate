@@ -19,4 +19,6 @@ public class Film {
     @JsonAdapter(DurationAdapter.class)
     private Duration duration;
     private Set<Long> likes;
+    private Set<Long> genres;
+    private Long rating;
 }

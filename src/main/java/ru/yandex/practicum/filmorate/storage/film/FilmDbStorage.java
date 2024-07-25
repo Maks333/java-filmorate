@@ -8,9 +8,11 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
 
-@Repository
+@Repository("dbFilmStorage")
 @RequiredArgsConstructor
 public class FilmDbStorage implements FilmStorage {
+    private static final String FIND_BY_ID = "SELECT * FROM films WHERE id = ?";
+
     private final JdbcTemplate jdbc;
     private final RowMapper<Film> mapper;
 
@@ -31,7 +33,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(long id) {
-        return null;
+        return jdbc.queryForObject(FIND_BY_ID, mapper, id);
     }
 
     @Override

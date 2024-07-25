@@ -30,4 +30,13 @@ public class FilmDbStorageTest {
                 .hasFieldOrPropertyWithValue("id", 1L)
                 .hasFieldOrPropertyWithValue("likes", new HashSet<>(List.of(1L, 2L, 3L, 4L)));
     }
+
+    @Test
+    public void testFindAllFilms() {
+        List<Film> films = filmStorage.getFilms();
+
+
+        assertThat(films)
+                .size().isEqualTo(5);
+    }
 }

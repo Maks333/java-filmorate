@@ -14,7 +14,8 @@ import java.util.Optional;
 public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String FIND_BY_ID = "SELECT * FROM users WHERE id = ?";
     private static final String FIND_ALL_USERS = "SELECT * FROM users";
-
+    private static final String INSERT_QUERY = "INSERT INTO users(email, login, name, birthday) " +
+            "VALUES(?, ?, ?, ?)";
 
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
@@ -27,7 +28,13 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
     @Override
     public User create(User user) {
-        return null;
+        long id = insert(INSERT_QUERY,
+                user.getEmail(),
+                user.getLogin(),
+                user.getName(),
+                user.getBirthday());
+        user.setId(id);
+        return user;
     }
 
     @Override

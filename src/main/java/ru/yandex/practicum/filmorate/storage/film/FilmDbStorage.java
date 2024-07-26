@@ -14,8 +14,13 @@ import java.util.Optional;
 public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     private static final String FIND_BY_ID = "SELECT * FROM films WHERE id = ?";
     private static final String FIND_ALL_FILMS = "SELECT * FROM films";
-    private static final String INSERT_QUERY = "INSERT INTO films(name, description, release_date, duration)" +
-            "VALUES(?, ?, ?, ?) returning id";
+    private static final String INSERT_QUERY = "INSERT INTO films(name, description, release_date, duration, rating_id) " +
+            "VALUES(?, ?, ?, ?, ?)";
+    private static final String INSERT_GENRES = "INSERT INTO film_to_genre(film_id, genre_id)" +
+            "VALUES(?, ?)";
+
+    private static final  String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
+    private static final  String DELETE_GENRES = "DELETE FROM film_to_genre WHERE id = ?";
 
     public FilmDbStorage(JdbcTemplate jdbc, RowMapper<Film> mapper) {
         super(jdbc, mapper);
@@ -46,7 +51,21 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
 
     @Override
     public Film update(Film film) {
-        return null;
+        update(UPDATE_QUERY,
+                film.getName(),
+                film.getDescription(),
+                film.getReleaseDate(),
+                film.getDuration(),
+                film.getRating(),
+                film.getId());
+
+        if (!film.getGenres().isEmpty()) {
+            delete(DELETE_GENRES,film.getId());
+            for (Long genreId : film.getGenres()) {
+                insert(INSERT_GENRES, film.getId(), genreId);
+            }
+        }
+        return film;
     }
 
     @Override

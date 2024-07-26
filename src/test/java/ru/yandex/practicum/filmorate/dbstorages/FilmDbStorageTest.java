@@ -98,4 +98,11 @@ public class FilmDbStorageTest {
         Film film = filmStorage.getFilmById(1);
         System.out.println(film);
     }
+
+    @Test
+    public void testGetByLikes() {
+        List<Film> filmsByLikes = filmStorage.getFilmsByLikes(3);
+
+        System.out.println(filmsByLikes);
+    }
 }

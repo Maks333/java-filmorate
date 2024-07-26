@@ -19,8 +19,8 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     private static final String INSERT_GENRES = "INSERT INTO film_to_genre(film_id, genre_id)" +
             "VALUES(?, ?)";
 
-    private static final  String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
-    private static final  String DELETE_GENRES = "DELETE FROM film_to_genre WHERE id = ?";
+    private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
+    private static final String DELETE_GENRES = "DELETE FROM film_to_genre WHERE id = ?";
 
     private static final String ADD_LIKE = "INSERT INTO likes(user_id, film_id) VALUES(?, ?)";
 
@@ -62,7 +62,7 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
                 film.getId());
 
         if (!film.getGenres().isEmpty()) {
-            delete(DELETE_GENRES,film.getId());
+            delete(DELETE_GENRES, film.getId());
             for (Long genreId : film.getGenres()) {
                 insert(INSERT_GENRES, film.getId(), genreId);
             }
@@ -88,11 +88,11 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     @Override
     public Film getFilmById(long id) {
         Optional<Film> film = findOne(FIND_BY_ID, id);
-       if (film.isPresent()) {
-           return film.get();
-       } else {
-           throw new NotFoundException("Film with id = " + id + " is not found");
-       }
+        if (film.isPresent()) {
+            return film.get();
+        } else {
+            throw new NotFoundException("Film with id = " + id + " is not found");
+        }
     }
 
     @Override

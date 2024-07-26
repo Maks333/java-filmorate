@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -19,7 +20,8 @@ public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
 
-    public FilmService(@Qualifier("dbFilmStorage") FilmStorage filmStorage, UserStorage userStorage) {
+    public FilmService(@Qualifier("dbFilmStorage") FilmStorage filmStorage,
+                       @Qualifier("dbUserStorage")UserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
@@ -46,9 +48,10 @@ public class FilmService {
 
     public void likeFilm(long id, long userId) {
         User user = userStorage.getUserById(userId);
-        Film film = filmStorage.getFilmById(id);
-        film.getLikes().add(user.getId());
-        log.info("User {} add like to {} film", user.getName(), film.getName());
+//        Film film = filmStorage.getFilmById(id);
+//        film.getLikes().add(user.getId());
+//        log.info("User {} add like to {} film", user.getName(), film.getName());
+        filmStorage.likeFilm(id, userId);
     }
 
     public Film getFilmById(long id) {

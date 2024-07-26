@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmDbStorageTest {
     private final FilmDbStorage filmStorage;
+    private final UserDbStorage userStorage;
 
     @Test
     public void testFindFilmById() {
@@ -80,5 +81,13 @@ public class FilmDbStorageTest {
         Film updatedFilm = filmStorage.update(film);
 
         System.out.println(updatedFilm);
+    }
+
+    @Test
+    public void testAddLike() {
+        filmStorage.likeFilm(1, 5);
+
+        Film film = filmStorage.getFilmById(1);
+        System.out.println(film);
     }
 }

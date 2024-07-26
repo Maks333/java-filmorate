@@ -28,7 +28,20 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
 
     @Override
     public Film create(Film film) {
-        return null;
+        long id = insert(INSERT_QUERY,
+                film.getName(),
+                film.getDescription(),
+                film.getReleaseDate(),
+                film.getDuration(),
+                film.getRating());
+        film.setId(id);
+        if (!film.getGenres().isEmpty()) {
+            for (Long genreId : film.getGenres()) {
+                insert(INSERT_GENRES, film.getId(), genreId);
+            }
+        }
+
+        return film;
     }
 
     @Override

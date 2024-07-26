@@ -67,4 +67,42 @@ public class UserDbStorageTest {
 
         System.out.println(userFromDb);
     }
+
+    @Test
+    public void testAddFriend() {
+        User user = userStorage.getUserById(4);
+        System.out.println(user);
+
+        userStorage.addFriend(3, 4);
+        User user1 = userStorage.getUserById(3);
+        user = userStorage.getUserById(4);
+        System.out.println(user);
+        System.out.println(user1);
+    }
+
+    @Test
+    public void testFindAllFriends() {
+        List<User> friends = userStorage.getFriends(2);
+
+        User user = userStorage.getUserById(2);
+        System.out.println(user);
+        System.out.println(friends);
+    }
+
+    @Test
+    public void testDeleteFriend() {
+        userStorage.deleteFriend(1, 3);
+
+        User user = userStorage.getUserById(1);
+        User user1 = userStorage.getUserById(3);
+        System.out.println(user);
+        System.out.println(user1);
+    }
+
+    @Test
+    public void testCommonFriends() {
+        List<User> commonFriends = userStorage.getCommonFriends(3, 4);
+        assertThat(commonFriends.getFirst())
+                .hasFieldOrPropertyWithValue("id", 2L);
+    }
 }

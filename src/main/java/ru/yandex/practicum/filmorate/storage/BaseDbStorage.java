@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import ru.yandex.practicum.filmorate.exception.InternalServerException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -39,7 +40,7 @@ public class BaseDbStorage<T> {
     protected void update(String query, Object... params) {
         int rowUpdated = jdbc.update(query, params);
         if (rowUpdated == 0) {
-            throw new InternalServerException("Data update ends with failure");
+            throw new NotFoundException("Data update ends with failure");
         }
     }
 

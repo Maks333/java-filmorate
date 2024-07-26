@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.ComponentScan;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
@@ -33,6 +35,7 @@ public class FilmDbStorageTest {
         assertThat(film)
                 .hasFieldOrPropertyWithValue("id", 1L)
                 .hasFieldOrPropertyWithValue("likes", new HashSet<>(List.of(1L, 2L, 3L, 4L)));
+        System.out.println(film);
     }
 
     @Test
@@ -51,8 +54,17 @@ public class FilmDbStorageTest {
         film.setDescription("Film10Desc");
         film.setDuration(Duration.ofMinutes(30));
         film.setReleaseDate(LocalDate.of(1999, 5, 10));
-        film.setRating(2L);
-        film.setGenres(new HashSet<>(List.of(1L, 2L, 3L)));
+        Mpa mpa = new Mpa();
+        mpa.setId(2L);
+        film.setMpa(mpa);
+        Genre genre1 = new Genre();
+        genre1.setId(1L);
+        Genre genre2 = new Genre();
+        genre2.setId(2L);
+        Genre genre3 = new Genre();
+        genre3.setId(3L);
+
+        film.setGenres(new HashSet<>(List.of(genre1, genre2, genre3)));
 
         film = filmStorage.create(film);
         assertThat(film)
@@ -75,8 +87,12 @@ public class FilmDbStorageTest {
         film.setDescription("Film10Desc");
         film.setDuration(Duration.ofMinutes(30));
         film.setReleaseDate(LocalDate.of(1999, 5, 10));
-        film.setRating(2L);
-        film.setGenres(new HashSet<>(List.of(1L)));
+        Mpa mpa = new Mpa();
+        mpa.setId(2L);
+        film.setMpa(mpa);
+        Genre genre1 = new Genre();
+        genre1.setId(1L);
+        film.setGenres(new HashSet<>(List.of(genre1)));
         film.setId(1);
         Film updatedFilm = filmStorage.update(film);
 

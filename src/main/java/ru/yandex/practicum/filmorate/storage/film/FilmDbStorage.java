@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.BaseDbStorage;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
             "VALUES(?, ?)";
 
     private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
-    private static final String DELETE_GENRES = "DELETE FROM film_to_genre WHERE id = ?";
+    private static final String DELETE_GENRES = "DELETE FROM film_to_genre WHERE film_id = ?";
 
     private static final String ADD_LIKE = "INSERT INTO likes(user_id, film_id) VALUES(?, ?)";
     private static final String REMOVE_LIKE = "DELETE FROM likes WHERE user_id = ? AND film_id = ?";
@@ -49,11 +50,11 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                film.getRating());
+                film.getMpa().getId());
         film.setId(id);
-        if (!film.getGenres().isEmpty()) {
-            for (Long genreId : film.getGenres()) {
-                insert(INSERT_GENRES, film.getId(), genreId);
+        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
+            for (Genre genre : film.getGenres()) {
+                insert(INSERT_GENRES, film.getId(), genre.getId());
             }
         }
 
@@ -66,17 +67,17 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
-                film.getDuration(),
-                film.getRating(),
+                film.getDuration().toMinutes(),
+                film.getMpa().getId(),
                 film.getId());
 
-        if (!film.getGenres().isEmpty()) {
+        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             delete(DELETE_GENRES, film.getId());
-            for (Long genreId : film.getGenres()) {
-                insert(INSERT_GENRES, film.getId(), genreId);
+            for (Genre genre : film.getGenres()) {
+                insert(INSERT_GENRES, film.getId(), genre.getId());
             }
         }
-        return film;
+        return getFilmById(film.getId());
     }
 
     @Override

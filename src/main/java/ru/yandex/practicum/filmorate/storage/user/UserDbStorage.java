@@ -16,6 +16,7 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String FIND_ALL_USERS = "SELECT * FROM users";
     private static final String INSERT_QUERY = "INSERT INTO users(email, login, name, birthday) " +
             "VALUES(?, ?, ?, ?)";
+    private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?";
 
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
@@ -39,7 +40,13 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
     @Override
     public User update(User user) {
-        return null;
+        update(UPDATE_QUERY,
+                user.getEmail(),
+                user.getLogin(),
+                user.getName(),
+                user.getBirthday(),
+                user.getId());
+        return getUserById(user.getId());
     }
 
     @Override

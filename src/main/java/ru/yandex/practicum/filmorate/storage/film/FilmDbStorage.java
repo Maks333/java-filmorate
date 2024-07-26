@@ -22,6 +22,8 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     private static final  String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, rating_id = ? WHERE id = ?";
     private static final  String DELETE_GENRES = "DELETE FROM film_to_genre WHERE id = ?";
 
+    private static final String ADD_LIKE = "INSERT INTO likes(user_id, film_id) VALUES(?, ?)";
+
     public FilmDbStorage(JdbcTemplate jdbc, RowMapper<Film> mapper) {
         super(jdbc, mapper);
     }
@@ -66,6 +68,21 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
             }
         }
         return film;
+    }
+
+    @Override
+    public void likeFilm(long id, long userId) {
+        insert(ADD_LIKE, userId, id);
+    }
+
+    @Override
+    public void unlikeFilm(long id, long userId) {
+
+    }
+
+    @Override
+    public List<Film> getFilmsByLikes(long count) {
+        return List.of();
     }
 
     @Override

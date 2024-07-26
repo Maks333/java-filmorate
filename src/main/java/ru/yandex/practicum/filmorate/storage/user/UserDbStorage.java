@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository("dbUserStorage")
 public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String FIND_BY_ID = "SELECT * FROM users WHERE id = ?";
+    private static final String FIND_ALL_USERS = "SELECT * FROM users";
 
 
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
@@ -21,7 +22,7 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
     @Override
     public List<User> getUsers() {
-        return List.of();
+        return findMany(FIND_ALL_USERS);
     }
 
     @Override

@@ -17,6 +17,17 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String INSERT_QUERY = "INSERT INTO users(email, login, name, birthday) " +
             "VALUES(?, ?, ?, ?)";
     private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?";
+    private static final String ADD_FRIEND = "INSERT INTO friends(user_id, friend_id) VALUES(?, ?)";
+
+    private static final String FIND_ALL_FRIENDS = "SELECT u.id, email, login, name, birthday FROM friends AS f " +
+            " JOIN users AS u ON u.id = f.friend_id " +
+            " WHERE user_id = ?";
+
+    private static final String REMOVE_FRIEND = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
+
+    private static final String FIND_COMMON_FRIENDS = "SELECT u.id, u.email, u.login, u.name, u.birthday FROM friends " +
+            "JOIN users AS u ON u.id = friend_id " +
+            "WHERE user_id = ? AND friend_id IN (SELECT friend_id FROM friends WHERE user_id = ?)";
 
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
@@ -62,5 +73,39 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     @Override
     public void deleteById(long id) {
 
+    }
+
+    @Override
+    public void addFriend(long id, long friendId) {
+        insert(ADD_FRIEND, friendId, id);
+    }
+
+    @Override
+    public void deleteFriend(long id, long friendId) {
+        User user = getUserById(id);
+        User friend = getUserById(friendId);
+
+        if (user.getFriends() != null && user.getFriends().contains(friendId)) {
+            jdbc.update(REMOVE_FRIEND, id, friendId);
+        } else {
+            throw new NotFoundException("Relation is not found");
+        }
+
+        if (friend.getFriends() != null && friend.getFriends().contains(id)) {
+            jdbc.update(REMOVE_FRIEND, friendId, id);
+        }
+    }
+
+    @Override
+    public List<User> getFriends(long id) {
+        return findMany(FIND_ALL_FRIENDS, id);
+    }
+
+    @Override
+    public List<User> getCommonFriends(long id, long otherId) {
+        User user = getUserById(id);
+        User user1 = getUserById(otherId);
+        //return findMany();
+        return findMany(FIND_COMMON_FRIENDS, id, otherId);
     }
 }

@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @JdbcTest
 @ComponentScan("ru.yandex.practicum.filmorate")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@Sql(value = {"/schema.sql", "/data.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/schema.sql", "/testing.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = "/clear.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class UserDbStorageTest {
     private final UserDbStorage userStorage;

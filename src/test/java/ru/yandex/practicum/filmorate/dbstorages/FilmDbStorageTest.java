@@ -90,4 +90,12 @@ public class FilmDbStorageTest {
         Film film = filmStorage.getFilmById(1);
         System.out.println(film);
     }
+
+    @Test
+    public void testsRemoveLike() {
+        filmStorage.unlikeFilm(1, 1);
+
+        Film film = filmStorage.getFilmById(1);
+        System.out.println(film);
+    }
 }

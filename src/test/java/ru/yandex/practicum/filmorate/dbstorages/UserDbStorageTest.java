@@ -55,4 +55,16 @@ public class UserDbStorageTest {
         System.out.println(userFromDb);
     }
 
+    @Test
+    public void testUpdateUser() {
+        User user = new User();
+        user.setEmail("email@gmail.com");
+        user.setName("name1");
+        user.setLogin("username1");
+        user.setBirthday(LocalDate.of(1999, 5, 22));
+        user.setId(5);
+        User userFromDb = userStorage.update(user);
+
+        System.out.println(userFromDb);
+    }
 }

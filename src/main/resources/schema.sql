@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS users, friends, likes, ratings, films, film_to_genre, genre
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    username VARCHAR(40) NOT NULL,
     email VARCHAR(200) NOT NULL CHECK (email LIKE '%@%'),
     login VARCHAR(40) NOT NULL,
     name VARCHAR(40) NOT NULL,

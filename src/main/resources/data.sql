@@ -28,11 +28,11 @@ INSERT INTO film_to_genre(film_id, genre_id) VALUES(4, 4);
 INSERT INTO film_to_genre(film_id, genre_id) VALUES(5, 1);
 
 --users
-INSERT INTO users(username, email, login, name, birthday) VALUES('username1', 'username1@gmail.com', 'user_login1', 'user1', '1894-09-11');
-INSERT INTO users(username, email, login, name, birthday) VALUES('username2', 'username2@gmail.com', 'user_login2', 'user2', '1991-05-01');
-INSERT INTO users(username, email, login, name, birthday) VALUES('username3', 'username3@gmail.com', 'user_login3', 'user3', '1999-06-02');
-INSERT INTO users(username, email, login, name, birthday) VALUES('username4', 'username4@gmail.com', 'user_login4', 'user4', '1985-08-13');
-INSERT INTO users(username, email, login, name, birthday) VALUES('username5', 'username5@gmail.com', 'user_login5', 'user5', '1922-09-22');
+INSERT INTO users(email, login, name, birthday) VALUES('username1@gmail.com', 'user_login1', 'user1', '1894-09-11');
+INSERT INTO users(email, login, name, birthday) VALUES('username2@gmail.com', 'user_login2', 'user2', '1991-05-01');
+INSERT INTO users(email, login, name, birthday) VALUES('username3@gmail.com', 'user_login3', 'user3', '1999-06-02');
+INSERT INTO users(email, login, name, birthday) VALUES('username4@gmail.com', 'user_login4', 'user4', '1985-08-13');
+INSERT INTO users(email, login, name, birthday) VALUES('username5@gmail.com', 'user_login5', 'user5', '1922-09-22');
 
 --friends
 INSERT INTO friends(user_id, friend_id) VALUES(1, 3);

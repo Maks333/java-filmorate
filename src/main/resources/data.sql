@@ -8,10 +8,10 @@ INSERT INTO ratings(name) VALUES('NC-17');
 --genres
 INSERT INTO genres(name) VALUES('Комедия');
 INSERT INTO genres(name) VALUES('Драма');
-INSERT INTO genres(name) VALUES('Боевик');
 INSERT INTO genres(name) VALUES('Мультфильм');
 INSERT INTO genres(name) VALUES('Триллер');
 INSERT INTO genres(name) VALUES('Документальный');
+INSERT INTO genres(name) VALUES('Боевик');
 
 --films
 INSERT INTO films(name, description, release_date, duration, rating_id) VALUES('film1', 'film1_desc', '1999-05-03', 100, 1);

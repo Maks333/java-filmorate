@@ -10,6 +10,8 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -27,5 +29,12 @@ public class UserDbStorageTest {
         assertThat(user)
                 .hasFieldOrPropertyWithValue("id", 1L);
         System.out.println(user);
+    }
+
+    @Test
+    public void testFindAllUsers() {
+        List<User> users = userStorage.getUsers();
+
+        assertThat(users).size().isEqualTo(5);
     }
 }

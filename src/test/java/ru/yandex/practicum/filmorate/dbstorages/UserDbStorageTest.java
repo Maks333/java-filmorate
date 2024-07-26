@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
-
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @JdbcTest
 @ComponentScan("ru.yandex.practicum.filmorate")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Sql(value = {"/schema.sql", "/testing.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/clear.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class UserDbStorageTest {
     private final UserDbStorage userStorage;
 
@@ -29,7 +31,6 @@ public class UserDbStorageTest {
 
         assertThat(user)
                 .hasFieldOrPropertyWithValue("id", 1L);
-        System.out.println(user);
     }
 
     @Test
@@ -49,10 +50,10 @@ public class UserDbStorageTest {
         User newUser = userStorage.create(user);
         assertThat(newUser)
                 .hasFieldOrPropertyWithValue("id", 6L);
-        System.out.println(newUser);
 
         User userFromDb = userStorage.getUserById(6);
-        System.out.println(userFromDb);
+        assertThat(userFromDb)
+                .hasFieldOrPropertyWithValue("id", 6L);
     }
 
     @Test
@@ -65,7 +66,7 @@ public class UserDbStorageTest {
         user.setId(5);
         User userFromDb = userStorage.update(user);
 
-        System.out.println(userFromDb);
+        assertThat(userFromDb.getId()).isEqualTo(5L);
     }
 
     @Test
@@ -76,27 +77,26 @@ public class UserDbStorageTest {
         userStorage.addFriend(3, 4);
         User user1 = userStorage.getUserById(3);
         user = userStorage.getUserById(4);
-        System.out.println(user);
-        System.out.println(user1);
+
+        assertThat(user1.getFriends()).contains(4L);
+        assertThat(user.getFriends()).doesNotContain(3L);
     }
 
     @Test
     public void testFindAllFriends() {
         List<User> friends = userStorage.getFriends(2);
 
-        User user = userStorage.getUserById(2);
-        System.out.println(user);
-        System.out.println(friends);
+        assertThat(friends.stream().map(User::getId).toList()).contains(3L, 4L);
     }
 
     @Test
     public void testDeleteFriend() {
-        userStorage.deleteFriend(1, 3);
-
         User user = userStorage.getUserById(1);
-        User user1 = userStorage.getUserById(3);
-        System.out.println(user);
-        System.out.println(user1);
+        assertThat(user.getFriends()).contains(3L);
+
+        userStorage.deleteFriend(1, 3);
+        User user1 = userStorage.getUserById(1);
+        assertThat(user1.getFriends()).doesNotContain(3L);
     }
 
     @Test

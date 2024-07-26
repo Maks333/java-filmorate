@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS users, friends, likes, ratings, films, film_to_genre, genres CASCADE;
+--DROP TABLE IF EXISTS users, friends, likes, ratings, films, film_to_genre, genres CASCADE;
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

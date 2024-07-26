@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS users, friends, likes, ratings, films, film_to_genre, genres CASCADE;

@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,4 +38,21 @@ public class UserDbStorageTest {
 
         assertThat(users).size().isEqualTo(5);
     }
+
+    @Test
+    public void testCreateUser() {
+        User user = new User();
+        user.setEmail("email@gmail.com");
+        user.setName("name1");
+        user.setLogin("username1");
+        user.setBirthday(LocalDate.of(1999, 5, 22));
+        User newUser = userStorage.create(user);
+        assertThat(newUser)
+                .hasFieldOrPropertyWithValue("id", 6L);
+        System.out.println(newUser);
+
+        User userFromDb = userStorage.getUserById(6);
+        System.out.println(userFromDb);
+    }
+
 }

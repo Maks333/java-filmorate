@@ -1,15 +1,16 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaDbStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -28,11 +29,25 @@ public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
 
+    private MpaDbStorage mpaStorage;
+    private GenreDbStorage genreStorage;
+
     public FilmService(@Qualifier("dbFilmStorage") FilmStorage filmStorage,
-                       @Qualifier("dbUserStorage")UserStorage userStorage) {
+                       @Qualifier("dbUserStorage") UserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
+
+    @Autowired
+    public void setMpaStorage(MpaDbStorage mpaStorage) {
+        this.mpaStorage = mpaStorage;
+    }
+
+    @Autowired
+    public void setGenreStorage(GenreDbStorage genreStorage) {
+        this.genreStorage = genreStorage;
+    }
+
 
     public List<Film> getFilmsByLikes(long count) {
         if (count <= 0) {
@@ -41,26 +56,15 @@ public class FilmService {
         }
 
         return filmStorage.getFilmsByLikes(count);
-//        return filmStorage.getFilms()
-//                .stream()
-//                .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
-//                .limit(count)
-//                .toList();
     }
 
     public void unlikeFilm(long id, long userId) {
         User user = userStorage.getUserById(userId);
-//        Film film = filmStorage.getFilmById(id);
-//        film.getLikes().remove(user.getId());
-//        log.info("User {} remove like from {} film", user.getName(), film.getName());
         filmStorage.unlikeFilm(id, userId);
     }
 
     public void likeFilm(long id, long userId) {
         User user = userStorage.getUserById(userId);
-//        Film film = filmStorage.getFilmById(id);
-//        film.getLikes().add(user.getId());
-//        log.info("User {} add like to {} film", user.getName(), film.getName());
         filmStorage.likeFilm(id, userId);
     }
 
@@ -118,6 +122,24 @@ public class FilmService {
         if (film.getDuration() == null || film.getDuration().isNegative() || film.getDuration().isZero()) {
             log.error("Duration is not a positive number or null");
             throw new ValidationException("Duration is not a positive number or null");
+        }
+
+        if (film.getMpa() != null) {
+            try {
+                mpaStorage.getMpaById(film.getMpa().getId());
+            } catch (NotFoundException ignored) {
+                throw new ValidationException("Mpa id is not found");
+            }
+        }
+
+        if (film.getGenres() != null) {
+            try {
+                for (Genre genre : film.getGenres()) {
+                    genreStorage.getGenreById(genre.getId());
+                }
+            } catch (NotFoundException ignored) {
+                throw new ValidationException("Genre id is not found");
+            }
         }
     }
 }

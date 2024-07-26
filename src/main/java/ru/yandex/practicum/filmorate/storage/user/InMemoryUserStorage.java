@@ -56,11 +56,6 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteById(long id) {
-        //TODO implement
-    }
-
-    @Override
     public void addFriend(long id, long friendId) {
         //db method
     }

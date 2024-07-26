@@ -22,21 +22,11 @@ public class UserService {
     public List<User> getCommonFriends(long id, long otherId) {
         User user = storage.getUserById(id);
         User otherUser = storage.getUserById(otherId);
-
-//        return user.getFriends().stream()
-//                .filter(userId -> otherUser.getFriends().contains(userId))
-//                .map(storage::getUserById)
-//                .toList();
         return storage.getCommonFriends(id, otherId);
     }
 
     public List<User> getFriends(long id) {
-//        return storage.getUserById(id).getFriends()
-//                .stream()
-//                .map(storage::getUserById)
-//                .toList();
         User user = storage.getUserById(id);
-
         return storage.getFriends(id);
     }
 
@@ -44,17 +34,11 @@ public class UserService {
         User user = storage.getUserById(id);
         User friend = storage.getUserById(friendId);
         storage.deleteFriend(id, friendId);
-//        user.getFriends().remove(friend.getId());
-//        friend.getFriends().remove(user.getId());
-//        log.info("User {} and User {} delete each other from friend list", user.getName(), friend.getName());
     }
 
     public void addFriend(long id, long friendId) {
         User user = storage.getUserById(id);
         User friend = storage.getUserById(friendId);
-//        user.getFriends().add(friend.getId());
-//        friend.getFriends().add(user.getId());
-//        log.info("User {} and User {} add each other into friend list", user.getName(), friend.getName());
         storage.addFriend(id, friendId);
     }
 

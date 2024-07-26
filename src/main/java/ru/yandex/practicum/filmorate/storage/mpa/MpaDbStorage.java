@@ -18,7 +18,6 @@ public class MpaDbStorage {
     private static final String FIND_FILM_RATING = "SELECT * FROM ratings";
     private static final String FIND_FILM_RATING_BY_ID = "SELECT * FROM ratings WHERE id = ?";
 
-
     public List<Mpa> getAllMpa() {
         return jdbc.query(FIND_FILM_RATING, mapper);
     }

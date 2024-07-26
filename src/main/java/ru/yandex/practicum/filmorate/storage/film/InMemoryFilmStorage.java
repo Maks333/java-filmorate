@@ -58,11 +58,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteById(long id) {
-        //Db method
-    }
-
-    @Override
     public void likeFilm(long id, long userId) {
         //Db method
     }

@@ -1,14 +1,19 @@
 --ratings
-INSERT  INTO ratings(name) VALUES('G');
-INSERT  INTO ratings(name) VALUES('PG');
-INSERT  INTO ratings(name) VALUES('PG-13');
-INSERT  INTO ratings(name) VALUES('R');
-INSERT  INTO ratings(name) VALUES('NC-17');
+MERGE INTO ratings r
+    USING (VALUES ('G') , ('PG'), ('PG-13'), ('R'), ('NC-17')) AS s (source)
+    ON r.name = s.source
+WHEN MATCHED THEN
+    UPDATE
+        SET r.name = source
+WHEN NOT MATCHED THEN
+    INSERT(name) VALUES(source);
 
 --genres
-INSERT  INTO genres(name) VALUES('Комедия');
-INSERT  INTO genres(name) VALUES('Драма');
-INSERT  INTO genres(name) VALUES('Мультфильм');
-INSERT  INTO genres(name) VALUES('Триллер');
-INSERT  INTO genres(name) VALUES('Документальный');
-INSERT  INTO genres(name) VALUES('Боевик');
+MERGE INTO genres g
+    USING (VALUES ('Комедия') , ('Драма'), ('Мультфильм'), ('Триллер'), ('Документальный'), ('Боевик')) AS s (source)
+    ON g.name = s.source
+WHEN MATCHED THEN
+    UPDATE
+        SET g.name = source
+WHEN NOT MATCHED THEN
+    INSERT(name) VALUES(source);

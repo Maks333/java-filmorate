@@ -24,8 +24,7 @@ public class MpaDbStorage {
 
     public Mpa getMpaById(long id) {
         try {
-            Mpa mpa = jdbc.queryForObject(FIND_FILM_RATING_BY_ID, mapper, id);
-            return mpa;
+            return jdbc.queryForObject(FIND_FILM_RATING_BY_ID, mapper, id);
         } catch (RuntimeException ignored) {
             throw new NotFoundException("Mpa is not found");
         }

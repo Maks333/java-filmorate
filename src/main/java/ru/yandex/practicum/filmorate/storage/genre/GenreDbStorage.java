@@ -24,8 +24,7 @@ public class GenreDbStorage {
 
     public Genre getGenreById(long id) {
         try {
-            Genre genre = jdbc.queryForObject(FIND_FILM_GENRE_BY_ID, mapper, id);
-            return genre;
+            return jdbc.queryForObject(FIND_FILM_GENRE_BY_ID, mapper, id);
         } catch (RuntimeException ignored) {
             throw new NotFoundException("Genre is not found");
         }

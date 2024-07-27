@@ -72,13 +72,15 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
     @Override
     public void addFriend(long id, long friendId) {
+        getUserById(id);
+        getUserById(friendId);
         insert(ADD_FRIEND, id, friendId);
     }
 
     @Override
     public void deleteFriend(long id, long friendId) {
         User user = getUserById(id);
-        User friend = getUserById(friendId);
+        getUserById(friendId);
 
         if (user.getFriends() != null && user.getFriends().contains(friendId)) {
             jdbc.update(REMOVE_FRIEND, id, friendId);
@@ -87,13 +89,14 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
     @Override
     public List<User> getFriends(long id) {
+        getUserById(id);
         return findMany(FIND_ALL_FRIENDS, id);
     }
 
     @Override
     public List<User> getCommonFriends(long id, long otherId) {
-        User user = getUserById(id);
-        User user1 = getUserById(otherId);
+        getUserById(id);
+        getUserById(otherId);
         return findMany(FIND_COMMON_FRIENDS, id, otherId);
     }
 }

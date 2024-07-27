@@ -4,11 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaDbStorage;
@@ -59,12 +57,12 @@ public class FilmService {
     }
 
     public void unlikeFilm(long id, long userId) {
-        User user = userStorage.getUserById(userId);
+        userStorage.getUserById(userId);
         filmStorage.unlikeFilm(id, userId);
     }
 
     public void likeFilm(long id, long userId) {
-        User user = userStorage.getUserById(userId);
+        userStorage.getUserById(userId);
         filmStorage.likeFilm(id, userId);
     }
 
@@ -125,20 +123,18 @@ public class FilmService {
         }
 
         if (film.getMpa() != null) {
-            try {
-                mpaStorage.getMpaById(film.getMpa().getId());
-            } catch (NotFoundException ignored) {
-                throw new ValidationException("Mpa id is not found");
+            long mpa = film.getMpa().getId();
+            if (mpa <= 0 || mpa > mpaStorage.getAllMpa().size()) {
+                throw new ValidationException("Mpa is not valid");
             }
         }
 
         if (film.getGenres() != null) {
-            try {
-                for (Genre genre : film.getGenres()) {
-                    genreStorage.getGenreById(genre.getId());
+            long genresCount = genreStorage.getAllGenres().size();
+            for (Long id : film.getGenres().stream().map(Genre::getId).toList()) {
+                if (id <= 0 || id > genresCount) {
+                    throw new ValidationException("Genre is not valid");
                 }
-            } catch (NotFoundException ignored) {
-                throw new ValidationException("Genre id is not found");
             }
         }
     }

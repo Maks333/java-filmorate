@@ -20,25 +20,18 @@ public class UserService {
     }
 
     public List<User> getCommonFriends(long id, long otherId) {
-        User user = storage.getUserById(id);
-        User otherUser = storage.getUserById(otherId);
         return storage.getCommonFriends(id, otherId);
     }
 
     public List<User> getFriends(long id) {
-        User user = storage.getUserById(id);
         return storage.getFriends(id);
     }
 
     public void deleteFriend(long id, long friendId) {
-        User user = storage.getUserById(id);
-        User friend = storage.getUserById(friendId);
         storage.deleteFriend(id, friendId);
     }
 
     public void addFriend(long id, long friendId) {
-        User user = storage.getUserById(id);
-        User friend = storage.getUserById(friendId);
         storage.addFriend(id, friendId);
     }
 

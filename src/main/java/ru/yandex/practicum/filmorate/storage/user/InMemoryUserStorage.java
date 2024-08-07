@@ -56,8 +56,25 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteById(long id) {
-        //TODO implement
+    public void addFriend(long id, long friendId) {
+        //db method
+    }
+
+    @Override
+    public void deleteFriend(long id, long friendId) {
+        //db method
+    }
+
+    @Override
+    public List<User> getFriends(long id) {
+        //db method
+        return List.of();
+    }
+
+    @Override
+    public List<User> getCommonFriends(long id, long otherId) {
+        //db method
+        return List.of();
     }
 
     private void validate(User user) {

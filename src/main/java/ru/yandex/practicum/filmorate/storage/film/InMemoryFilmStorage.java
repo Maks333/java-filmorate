@@ -58,8 +58,18 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteById(long id) {
-        //TODO implement
+    public void likeFilm(long id, long userId) {
+        //Db method
+    }
+
+    @Override
+    public void unlikeFilm(long id, long userId) {
+        //Db method
+    }
+
+    @Override
+    public List<Film> getFilmsByLikes(long count) {
+        return List.of();
     }
 
     private void validate(Film film) {
